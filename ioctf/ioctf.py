@@ -5,6 +5,8 @@
 
 import threading, sys, os, socket, subprocess
 
+MAX_RECV=10000 # define the max recv once in interactive mode.
+
 class io_base():
 
     def __init__(self):
@@ -38,13 +40,18 @@ class io_base():
     def recvline(self)->bytes:
         return self.recvuntil(b"\n")
 
+    def isdebug(self)->bool:
+        pass
+
     def interactive(self):
         print('[+] interative with',self.info())
         def recv_thread():
             while True:
                 try:
-                    cur = self.recv(1)
-                    sys.stdout.write(cur)
+                    cur = self.recv(MAX_RECV)
+                    if self.isdebug():
+                        print("[recv]:",str(cur))
+                    sys.stdout.write(cur.decode()) # TODO:utf-8 is not enough.
                     sys.stdout.flush()
                 except EOFError:
                     print('Got EOF while reading in interactive')
@@ -52,22 +59,24 @@ class io_base():
         t = threading.Thread(target = recv_thread,daemon=True)
         t.start()
         while True:
-            print('$', end='')
             data = ''
             while True:
                 d = sys.stdin.read(1)
+                if self.isdebug():
+                    print("[send]:",d)
                 data += d
-                if d == b'\n':
+                if d == '\n':
                     break
-            self.send(data)
+            self.send(data.encode())
 
 class remote(io_base):
 
-    def __init__(self, ip, port):
+    def __init__(self, ip, port,debug=False):
         self.ip = ip
         self.port = port
         self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((ip,port))
+        self.debug = debug
     
     def info(self):
         return self.ip+":"+str(self.port)
@@ -83,8 +92,9 @@ class remote(io_base):
         
     
 class process:
-    def __init__(self, cmd):
+    def __init__(self, cmd,debug=False):
         self.pipe = subprocess.Popen(cmd, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        self.debug = debug
 
     def send(self, data):
         return self.pipe.stdin.write(data)

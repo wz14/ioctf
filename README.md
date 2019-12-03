@@ -2,6 +2,10 @@
 
 A simple io package for ctf using python3.
 
+## Motivation
+
+Pwntools is a great tool for ctf competation.But sometimes it is not work for me using python3.What I just need is io communication with remote server easily.So I write this package using pure python3.You can install it using just one command and use easily as pwntools.
+
 ## Install
 
 Just one step.
@@ -17,7 +21,14 @@ from ioctf import *
 con = remote("123.123.123.123",8080)
 con.sendline(b"Hello Alice!")
 assert con.recvuntil(b"Bob!")==b"Hello Bob!"
+con.interactive()
 ```
+
+More usage in here.
+
+## Contribute
+
+The python code is easy to modify. I hope you can pull request more feathers about io in ctf and talk to me.
 
 ## License
 

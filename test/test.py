@@ -5,7 +5,7 @@
 
 from ioctf import *
 
-io = remote("188.131.177.11",9191)
+io = remote("188.131.177.11",9090)
 io.sendline(b"Hello Alice!")
 assert b"Hello Bob!" == io.recv(10)
-io.close()
+io.interactive()
