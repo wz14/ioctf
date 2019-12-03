@@ -1,3 +1,3 @@
 # IOCTF
 
-A simple io package for ctf use python3.
+A simple io package for ctf using python3.
