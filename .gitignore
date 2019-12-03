@@ -1,0 +1,4 @@
+dist/*
+build/*
+ioctf.egg-info/*
+ioctf/__pycache__/*
