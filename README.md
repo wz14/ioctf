@@ -24,7 +24,7 @@ assert con.recvuntil(b"Bob!")==b"Hello Bob!"
 con.interactive()
 ```
 
-More usage in here.
+More usage in [here](https://github.com/WangZhuo2000/ioctf/blob/master/doc/ioctf_usage.md).
 
 ## Contribute
 
