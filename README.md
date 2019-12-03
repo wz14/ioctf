@@ -16,7 +16,7 @@ pip install ioctf
 from ioctf import *
 con = remote("123.123.123.123",8080)
 con.sendline(b"Hello Alice!")
-assert con.recv(10)==b"Hello Bob!"
+assert con.recvuntil(b"Bob!")==b"Hello Bob!"
 ```
 
 ## License
